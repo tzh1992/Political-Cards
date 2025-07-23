@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>政治學卡片</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .card-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 40px 20px;
+      gap: 24px;
+      height: 100vh;
+      align-items: center;
+    }
+
+    .card {
+      flex: 0 0 85%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 28px;
+      scroll-snap-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .card-title-section h3 {
+      color: white;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+    }
+
+    .card-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
+    }
+
+    .info-block {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .info-block:last-child {
+      margin-bottom: 0;
+    }
+
+    /* 第一層級：主要資訊 - 最大最粗 */
+    .info-primary {
+      color: rgba(255, 255, 255, 1);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 第二層級：說明資訊 - 中等大小 */
+    .info-secondary {
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* 第三層級：補充註解 - 較小較淡 */
+    .info-tertiary {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.85rem;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 0;
+      padding-left: 12px;
+      border-left: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .comparison-table {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .comparison-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 12px 8px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 0.85rem;
+    }
+
+    .comparison-table th {
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .check-yes {
+      color: #4ade80;
+      font-weight: bold;
+    }
+
+    .check-no {
+      color: #f87171;
+      font-weight: bold;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      margin: 4px 4px 0 0;
+      font-weight: 500;
+    }
+
+    .tag-container {
+      margin-top: 16px;
+    }
+
+    /* 滾動條樣式 */
+    .card-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .card-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    .card-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .card::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .card::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        flex: 0 0 90%;
+        max-width: 90%;
+        padding: 24px;
+        max-height: 85vh;
+      }
+      
+      .card-header {
+        gap: 12px;
+      }
+      
+      .card-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+      }
+      
+      .card-title-section h3 {
+        font-size: 1.3rem;
+      }
+      
+      .info-primary {
+        font-size: 1rem;
+      }
+      
+      .info-secondary {
+        font-size: 0.9rem;
+      }
+      
+      .info-tertiary {
+        font-size: 0.8rem;
+      }
+      
+      .comparison-table th,
+      .comparison-table td {
+        padding: 10px 6px;
+        font-size: 0.8rem;
+      }
+      
+      .comparison-table th {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        flex: 0 0 95%;
+        padding: 20px;
+      }
+      
+      .info-primary {
+        font-size: 0.95rem;
+      }
+      
+      .info-secondary {
+        font-size: 0.85rem;
+      }
+      
+      .info-tertiary {
+        font-size: 0.75rem;
+      }
+      
+      .comparison-table th,
+      .comparison-table td {
+        padding: 8px 4px;
+        font-size: 0.75rem;
+      }
+      
+      .comparison-table th {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card-container">
+    
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🏛️</div>
+        <div class="card-title-section">
+          <h3>政治體制是什麼？</h3>
+          <div class="card-subtitle">What is a Political System?</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">政治體制是國家如何組織權力與治理的方式。</p>
+        <p class="info-secondary">它決定了誰掌權、如何選舉、是否可批評政府。</p>
+        <p class="info-tertiary">理解政治體制，有助於判斷民主與威權的差異。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">⚖️</div>
+        <div class="card-title-section">
+          <h3>政體比較</h3>
+          <div class="card-subtitle">政治學上的差異如下</div>
+        </div>
+      </div>
+      <div class="comparison-table">
+        <table>
+          <tr>
+            <th>項目</th>
+            <th>完全執政</th>
+            <th>一黨專政</th>
+          </tr>
+          <tr>
+            <td>是否民主</td>
+            <td class="check-yes">✅ 是</td>
+            <td class="check-no">❌ 否</td>
+          </tr>
+          <tr>
+            <td>是否有反對黨</td>
+            <td class="check-yes">✅ 有</td>
+            <td class="check-no">❌ 無</td>
+          </tr>
+          <tr>
+            <td>選舉是否自由</td>
+            <td class="check-yes">✅ 自由競爭</td>
+            <td class="check-no">❌ 控制選舉</td>
+          </tr>
+          <tr>
+            <td>媒體自由</td>
+            <td class="check-yes">✅ 可批評政府</td>
+            <td class="check-no">❌ 嚴格管控</td>
+          </tr>
+          <tr>
+            <td>是否可輪替政權</td>
+            <td class="check-yes">✅ 可政黨輪替</td>
+            <td class="check-no">❌ 長期執政</td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="info-block" style="margin-top: 24px;">
+        <p class="info-primary">完全執政：在民主體制下，一個政黨同時掌握行政與立法權。</p>
+        <p class="info-primary">一黨專政：國家由單一政黨主導，排除政治競爭與異議。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🇺🇸</div>
+        <div class="card-title-section">
+          <h3>美國</h3>
+          <div class="card-subtitle">United States</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">總統制／聯邦制民主</p>
+        <p class="info-secondary">三權分立，總統直選、兩院國會、法院獨立。</p>
+        <p class="info-tertiary">民主自由度高，制度穩定。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">總統制</div>
+        <div class="tag">聯邦制</div>
+        <div class="tag">三權分立</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🇨🇳</div>
+        <div class="card-title-section">
+          <h3>中國</h3>
+          <div class="card-subtitle">China</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">一黨專政／共產主義國家</p>
+        <p class="info-secondary">中國共產黨領導一切，無多黨競爭。</p>
+        <p class="info-tertiary">權力集中，媒體與言論受控。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">一黨制</div>
+        <div class="tag">威權體制</div>
+        <div class="tag">黨國體制</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🇷🇺</div>
+        <div class="card-title-section">
+          <h3>俄羅斯</h3>
+          <div class="card-subtitle">Russia</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">威權體制</p>
+        <p class="info-secondary">表面選舉實質集權，異議受壓迫。</p>
+        <p class="info-tertiary">新聞自由與選舉公正性遭質疑。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">威權主義</div>
+        <div class="tag">競爭性威權</div>
+        <div class="tag">強人政治</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🇩🇪</div>
+        <div class="card-title-section">
+          <h3>德國</h3>
+          <div class="card-subtitle">Germany</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">議會內閣制民主</p>
+        <p class="info-secondary">總理由多數黨國會推選產生。</p>
+        <p class="info-tertiary">政黨制衡強，民主成熟穩健。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">議會制</div>
+        <div class="tag">聯邦制</div>
+        <div class="tag">內閣制</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🇰🇵</div>
+        <div class="card-title-section">
+          <h3>北韓</h3>
+          <div class="card-subtitle">North Korea</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">極權體制</p>
+        <p class="info-secondary">家族統治、領袖崇拜、全面監控。</p>
+        <p class="info-tertiary">人權與民主指標最低國家之一。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">極權主義</div>
+        <div class="tag">世襲制</div>
+        <div class="tag">個人崇拜</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🇹🇼</div>
+        <div class="card-title-section">
+          <h3>台灣</h3>
+          <div class="card-subtitle">Taiwan</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">半總統制民主共和制</p>
+        <p class="info-secondary">總統直選，行政院長為政府首長，五權分立。</p>
+        <p class="info-tertiary">從威權轉型為穩定民主體制。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">半總統制</div>
+        <div class="tag">五權分立</div>
+        <div class="tag">民主轉型</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
