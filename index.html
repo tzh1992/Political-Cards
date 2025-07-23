@@ -13,9 +13,40 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
       min-height: 100vh;
       overflow-x: hidden;
+    }
+
+    .background {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 110vw;
+      height: 110vh;
+      z-index: -2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      overflow: hidden;
+      background: url('Image from Pinterest (2).jpg') center/cover no-repeat;
+      background-size: cover;
+      filter: blur(2px) brightness(0.9);
+      /* opacity: 0.7; */
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* background: linear-gradient(to bottom right, rgba(255, 205, 106, 0.1), rgba(255, 137, 101, 0.1)); */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      z-index: -1;
+      opacity: 0.7;
     }
 
     .card-container {
@@ -233,6 +264,13 @@
     }
 
     @media (max-width: 768px) {
+      .background {
+        width: 180vw;
+        height: 180vh;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
       .card {
         flex: 0 0 90%;
         max-width: 90%;
@@ -308,6 +346,9 @@
   </style>
 </head>
 <body>
+  <div class="background"></div>
+  <div class="overlay"></div>
+
   <div class="card-container">
     
     <div class="card">
@@ -322,6 +363,46 @@
         <p class="info-primary">政治體制是國家如何組織權力與治理的方式。</p>
         <p class="info-secondary">它決定了誰掌權、如何選舉、是否可批評政府。</p>
         <p class="info-tertiary">理解政治體制，有助於判斷民主與威權的差異。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🗳️</div>
+        <div class="card-title-section">
+          <h3>完全執政</h3>
+          <div class="card-subtitle">Full Control of Government</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">在民主體制下，一個政黨同時掌握行政與立法權。</p>
+        <p class="info-secondary">雖然一黨掌權，但仍保持民主制度的基本要素。</p>
+        <p class="info-tertiary">屬於民主制度，仍有反對黨與選舉機制制衡。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">民主制度</div>
+        <div class="tag">政黨輪替</div>
+        <div class="tag">制衡機制</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🏴</div>
+        <div class="card-title-section">
+          <h3>一黨專政</h3>
+          <div class="card-subtitle">One-party Dictatorship</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">國家由單一政黨主導，排除政治競爭與異議。</p>
+        <p class="info-secondary">禁止或嚴格限制其他政黨活動，控制選舉過程。</p>
+        <p class="info-tertiary">屬於威權或極權體制，無真正的自由選舉。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">威權體制</div>
+        <div class="tag">長期執政</div>
+        <div class="tag">政治壟斷</div>
       </div>
     </div>
 
@@ -367,10 +448,25 @@
           </tr>
         </table>
       </div>
-      
-      <div class="info-block" style="margin-top: 24px;">
-        <p class="info-primary">完全執政：在民主體制下，一個政黨同時掌握行政與立法權。</p>
-        <p class="info-primary">一黨專政：國家由單一政黨主導，排除政治競爭與異議。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🇹🇼</div>
+        <div class="card-title-section">
+          <h3>台灣</h3>
+          <div class="card-subtitle">Taiwan</div>
+        </div>
+      </div>
+      <div class="info-block">
+        <p class="info-primary">半總統制民主共和制</p>
+        <p class="info-secondary">總統直選，行政院長為政府首長，五權分立。</p>
+        <p class="info-tertiary">從威權轉型為穩定民主體制。</p>
+      </div>
+      <div class="tag-container">
+        <div class="tag">半總統制</div>
+        <div class="tag">五權分立</div>
+        <div class="tag">民主轉型</div>
       </div>
     </div>
 
@@ -471,26 +567,6 @@
         <div class="tag">極權主義</div>
         <div class="tag">世襲制</div>
         <div class="tag">個人崇拜</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon">🇹🇼</div>
-        <div class="card-title-section">
-          <h3>台灣</h3>
-          <div class="card-subtitle">Taiwan</div>
-        </div>
-      </div>
-      <div class="info-block">
-        <p class="info-primary">半總統制民主共和制</p>
-        <p class="info-secondary">總統直選，行政院長為政府首長，五權分立。</p>
-        <p class="info-tertiary">從威權轉型為穩定民主體制。</p>
-      </div>
-      <div class="tag-container">
-        <div class="tag">半總統制</div>
-        <div class="tag">五權分立</div>
-        <div class="tag">民主轉型</div>
       </div>
     </div>
 
